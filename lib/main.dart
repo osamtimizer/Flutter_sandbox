@@ -3,6 +3,28 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+  Column _buildButtonColumn(Color color, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: color,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -45,6 +67,19 @@ class MyApp extends StatelessWidget {
       ),
     );
 
+    Color color = Theme.of(context).primaryColor;
+
+    Widget buttonSection = Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildButtonColumn(color, Icons.call, 'Call'),
+          _buildButtonColumn(color, Icons.near_me, 'Route'),
+          _buildButtonColumn(color, Icons.share, 'Share'),
+        ],
+      ),
+    );
+
     return MaterialApp(
       title: 'Flutter layout Demo',
       home: Scaffold(
@@ -54,6 +89,7 @@ class MyApp extends StatelessWidget {
         body: Column(
           children: [
             titleSection,
+            buttonSection,
           ],
         ),
       ),
