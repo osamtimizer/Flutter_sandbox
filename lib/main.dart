@@ -7,10 +7,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter layout Demo',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('sandbox'),
+          title: Text('flutter layout demo'),
         ),
         body: Center(
           child: Text("Hello world"),
