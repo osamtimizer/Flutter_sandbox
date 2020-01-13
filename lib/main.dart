@@ -100,7 +100,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('flutter layout demo'),
         ),
-        body: Column(
+        body: ListView(
           children: [
             Image.asset(
               'images/lake.jpg',
