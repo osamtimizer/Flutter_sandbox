@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+class FavoriteWidget extends StatefulWidget {
+  // createState method creates State object.
+  @override
+  _FavoriteWidgetsState createState() => _FavoriteWidgetsState();
+}
+
 class MyApp extends StatelessWidget {
 
   Column _buildButtonColumn(Color color, IconData icon, String label) {
