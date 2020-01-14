@@ -8,6 +8,48 @@ class FavoriteWidget extends StatefulWidget {
   _FavoriteWidgetsState createState() => _FavoriteWidgetsState();
 }
 
+// State class is a generic class.
+// This class stores some mutable status.
+class _FavoriteWidgetsState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  @override
+  build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(0),
+          child: IconButton(
+            icon: (_isFavorited ? Icon(Icons.star) : Icon(Icons.star_border)),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
+        ),
+        SizedBox(
+          width: 18,
+          child: Container(
+            child: Text('$_favoriteCount'),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _favoriteCount -= 1;
+        _isFavorited = false;
+      } else {
+        _favoriteCount += 1;
+        _isFavorited = true;
+      }
+    });
+  }
+}
+
 class MyApp extends StatelessWidget {
 
   Column _buildButtonColumn(Color color, IconData icon, String label) {
@@ -63,12 +105,7 @@ class MyApp extends StatelessWidget {
               ],
             ),
           ),
-          // these are children of Row Widget.
-          Icon(
-              Icons.star,
-              color: Colors.red[500]
-          ),
-          Text('41'),
+          FavoriteWidget(),
         ],
       ),
     );
