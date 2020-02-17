@@ -1,76 +1,80 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<Album> fetchAlbum() async {
+  final response = await http.get('https://jsonplaceholder.typicode.com/albums/1');
+
+  if (response.statusCode == 200) {
+    // success
+    return Album.fromJson(json.decode(response.body));
+  } else {
+    // failure
+    throw Exception('Failed to load album');
+  }
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  Album({this.userId, this.id, this.title});
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
 
 void main() => runApp(MyApp());
 
-class Todo {
-  final String title;
-  final String description;
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
 
-  Todo(this.title, this.description);
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
+class _MyAppState extends State<MyApp> {
+  Future<Album> futureAlbum;
 
-class MyApp extends StatelessWidget {
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchAlbum();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Passing data",
-      home: TodoScreen(
-        todos: List.generate(20, (i) => Todo(
-          'Todo $i',
-          'A description of what needs to be done for Todo $i',
-        ),
-        ),
+      title: 'Fetch Data Example',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-    );
-  }
-}
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Fetch Data Example'),
+        ),
+        body: Center(
+          child: FutureBuilder<Album>(
+            future: futureAlbum,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data.title);
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
 
-class TodoScreen extends StatelessWidget {
-  final List<Todo> todos;
-
-  TodoScreen({ Key key, @required this.todos }) : super(key : key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("todos"),
-      ),
-      body: ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(todos[index].title),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(todo: todos[index]),
-                ),
-              );
+              return CircularProgressIndicator();
             },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final Todo todo;
-  DetailScreen({ Key key, @required this.todo}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(todo.title),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(todo.description),
+          ),
+        ),
       ),
     );
   }
